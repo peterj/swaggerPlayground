@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace swaggerPlayground
 {
@@ -24,6 +26,15 @@ namespace swaggerPlayground
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSwaggerGen(o => {
+                o.SwaggerDoc(
+                    "v1", 
+                    new Info 
+                    { 
+                    Title = "swaggerPlayground API",
+                    Version = "v1"
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +46,11 @@ namespace swaggerPlayground
             }
 
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(o =>
+            {
+                o.SwaggerEndpoint("/swagger/v1/swagger.json", "API");
+            });
         }
     }
 }
